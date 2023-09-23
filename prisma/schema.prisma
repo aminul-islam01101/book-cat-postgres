@@ -9,7 +9,77 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+// schema.prisma
+
 model User {
-  id String @id @default(uuid())
-  name String
+  id        String    @default(uuid()) @id
+  name      String
+  email     String    @unique
+  password  String
+  role      UserRole   // Use an enum to represent the role
+  contactNo String
+  address   String
+  profileImg String?
+  reviewsAndRatings ReviewAndRating[] // Add this line to define the opposite relation
+}
+
+enum UserRole {
+  admin
+  customer
+}
+
+
+
+model Category {
+  id    String  @default(uuid()) @id
+  title String
+  books Book[]  // Define the relation
+}
+
+model Book {
+  id             String  @default(uuid()) @id
+  title          String
+  author         String
+  price          Float
+  genre          String
+  publicationDate String
+  categoryId     String
+  category       Category @relation(fields: [categoryId], references: [id])
+  reviewsAndRatings ReviewAndRating[]
+  orderedBooks   OrderedBook[] // Define the relation
+}
+
+model ReviewAndRating {
+  id      String @default(uuid()) @id
+  review  String
+  rating  Int
+  userId  String
+  bookId  String
+  user    User   @relation(fields: [userId], references: [id])
+  book    Book   @relation(fields: [bookId], references: [id])
+}
+ 
+model Order {
+  id            String    @default(uuid()) @id
+  userId        String
+  status        OrderStatus   @default(PENDING)
+  createdAt     DateTime  @default(now())
+  orderedBooks  OrderedBook[] // Define the relation
+}
+
+enum OrderStatus {
+  PENDING
+  SHIPPED
+  DELIVERED
+}
+
+model OrderedBook {
+  id        String  @default(uuid()) @id
+  orderId   String
+  bookId    String
+  quantity  Int
+
+  order     Order @relation(fields: [orderId], references: [id])
+  book      Book  @relation(fields: [bookId], references: [id])
 }
