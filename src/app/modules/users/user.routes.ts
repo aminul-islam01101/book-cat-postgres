@@ -12,6 +12,18 @@ router.post(
   zodValidator(UserValidations.createUserZodSchema),
   UserControllers.createUser
 );
+router.get('/', UserControllers.getUsers);
+router.get(
+  '/profile',
+  zodValidator(UserValidations.getProfileZodSchema),
+  UserControllers.getProfile
+);
+router
+  .route('/:id')
+  .get(UserControllers.getUser)
+  .patch(zodValidator(UserValidations.updateUserZodSchema), UserControllers.updateUser)
+  .delete(UserControllers.deleteUser);
+// .patch(productController.updateProductById)
 
 //% formate
 // router.route('/create-user',).post(
