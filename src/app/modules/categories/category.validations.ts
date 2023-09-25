@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-//% Login user validation
+//% category creation validation
 const categoryZodSchema = z.object({
   body: z.object({
     title: z.string({

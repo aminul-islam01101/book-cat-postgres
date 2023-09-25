@@ -13,6 +13,7 @@ const { ADMIN } = EnumUserRole; // Assuming only ADMIN can create/update/delete 
 // Create a category
 router.post(
   '/create-category',
+  roleVerifier(ADMIN),
   zodValidator(categoryValidations.categoryZodSchema),
   categoryControllers.createCategory
 );
@@ -26,11 +27,12 @@ router.get('/:id', categoryControllers.getCategory);
 // Update a specific category by ID
 router.patch(
   '/:id',
+  roleVerifier(ADMIN),
   zodValidator(categoryValidations.categoryZodSchema),
   categoryControllers.updateCategory
 );
 
 // Delete a specific category by ID
-router.delete('/:id', categoryControllers.deleteCategory);
+router.delete('/:id', roleVerifier(ADMIN), categoryControllers.deleteCategory);
 
 export const categoryRoutes = router;

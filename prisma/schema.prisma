@@ -44,8 +44,9 @@ model Book {
   price          Float
   genre          String
   publicationDate String
+
+  category       Category @relation(fields: [categoryId], references: [id],  onDelete: Cascade)
   categoryId     String
-  category       Category @relation(fields: [categoryId], references: [id])
   reviewsAndRatings ReviewAndRating[]
   orderedBooks   OrderedBook[] // Define the relation
 }
@@ -56,8 +57,8 @@ model ReviewAndRating {
   rating  Int
   userId  String
   bookId  String
-  user    User   @relation(fields: [userId], references: [id])
-  book    Book   @relation(fields: [bookId], references: [id])
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  book    Book   @relation(fields: [bookId], references: [id], onDelete: Cascade)
 }
  
 model Order {
@@ -80,6 +81,6 @@ model OrderedBook {
   bookId    String
   quantity  Int
 
-  order     Order @relation(fields: [orderId], references: [id])
-  book      Book  @relation(fields: [bookId], references: [id])
+  order     Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  book      Book  @relation(fields: [bookId], references: [id], onDelete: Cascade)
 }
