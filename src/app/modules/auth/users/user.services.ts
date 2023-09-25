@@ -1,7 +1,7 @@
 // Import PrismaClient or any database client you are using
 import { PrismaClient } from '@prisma/client';
 import httpStatus from 'http-status';
-import { HandleApiError } from '../../../utils/shared/errors/handleApiError';
+import { HandleApiError } from '../../../../utils/shared/errors/handleApiError';
 import { TUserRequest, TUserResponse } from './user.types';
 
 const prisma = new PrismaClient();

@@ -2,8 +2,8 @@ import { Request, Response } from 'express';
 import { RequestHandler } from 'express-serve-static-core';
 import httpStatus from 'http-status';
 
-import catchAsync from '../../../utils/shared/helpers/catchAsync';
-import sendResponse from '../../../utils/shared/helpers/sendResponse';
+import catchAsync from '../../../../utils/shared/helpers/catchAsync';
+import sendResponse from '../../../../utils/shared/helpers/sendResponse';
 
 import { UserServices } from './user.services';
 import { TUserRequest, TUserResponse } from './user.types';
@@ -21,6 +21,20 @@ const createUser: RequestHandler = catchAsync(async (req: Request, res: Response
     data: result,
   });
 });
+
+//& login
+const login: RequestHandler = catchAsync(async (req: Request, res: Response) => {
+  const { email, password } = req.body as { email: string; password: string };
+  const result = await UserServices.getProfile(email);
+
+  sendResponse<TUserResponse>(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'User Profile retrieved successfully!',
+    data: result,
+  });
+});
+
 //& GetUsers
 const getUsers: RequestHandler = catchAsync(async (req: Request, res: Response) => {
   const result = await UserServices.getUsers();
@@ -84,6 +98,7 @@ const getProfile: RequestHandler = catchAsync(async (req: Request, res: Response
 
 export const UserControllers = {
   createUser,
+  login,
   getUsers,
   getUser,
   updateUser,

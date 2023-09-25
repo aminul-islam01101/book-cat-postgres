@@ -1,18 +1,16 @@
 import express from 'express';
 
-import zodValidator from '../../../utils/middlewares/zodValidator';
+import zodValidator from '../../../../utils/middlewares/zodValidator';
 
+import roleVerifier from '../../../../utils/middlewares/roleVerifier';
+import { EnumUserRole } from '../../../../utils/shared/enum';
 import { UserControllers } from './user.controllers';
 import { UserValidations } from './user.validations';
 
 const router = express.Router();
+const { ADMIN, CUSTOMER } = EnumUserRole;
 
-router.post(
-  '/signup',
-  zodValidator(UserValidations.createUserZodSchema),
-  UserControllers.createUser
-);
-router.get('/', UserControllers.getUsers);
+router.get('/', roleVerifier(ADMIN), UserControllers.getUsers);
 router.get(
   '/profile',
   zodValidator(UserValidations.getProfileZodSchema),

@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { UserRole } from './user.types';
+import { EnumUserRole } from '../../../../utils/shared/enum';
 
 //% Create User validation
 const createUserZodSchema = z.object({
@@ -13,7 +13,7 @@ const createUserZodSchema = z.object({
     password: z.string({
       required_error: 'password is required',
     }),
-    role: z.nativeEnum(UserRole),
+    role: z.nativeEnum(EnumUserRole),
     contactNo: z.string({
       required_error: 'contactNo is required',
     }),
@@ -23,28 +23,19 @@ const createUserZodSchema = z.object({
     profileImg: z.string().optional(),
   }),
 });
-//% Update User validation
-const updateUserZodSchema = z.object({
-  body: z
-    .object({
-      name: z.string().optional(),
-
-      contactNo: z.string().optional(),
-      address: z.string().optional(),
-      profileImg: z.string().optional(),
-    })
-    .optional(),
-});
-const getProfileZodSchema = z.object({
+//% Login user validation
+const loginUserZodSchema = z.object({
   body: z.object({
     email: z.string({
+      required_error: 'email is required',
+    }),
+    password: z.string({
       required_error: 'email is required',
     }),
   }),
 });
 
-export const UserValidations = {
+export const emailAuthValidations = {
   createUserZodSchema,
-  updateUserZodSchema,
-  getProfileZodSchema,
+  loginUserZodSchema,
 };
