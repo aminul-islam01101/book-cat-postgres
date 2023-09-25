@@ -2,7 +2,7 @@
 import { PrismaClient } from '@prisma/client';
 import httpStatus from 'http-status';
 import { HandleApiError } from '../../../../utils/shared/errors/handleApiError';
-import { TUserRequest, TUserResponse } from './user.types';
+import { TUserRequest, TUserResponse } from '../emailAuth/emailAuth.types';
 
 const prisma = new PrismaClient();
 

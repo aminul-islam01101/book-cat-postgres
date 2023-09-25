@@ -9,20 +9,7 @@ import { UserValidations } from './user.validations';
 
 const router = express.Router();
 const { ADMIN, CUSTOMER } = EnumUserRole;
-router.get(
-  '/profile',
-  zodValidator(UserValidations.getProfileZodSchema),
-  UserControllers.getProfile
-);
-router.get('/', roleVerifier(ADMIN), UserControllers.getUsers);
-
-router.use('/:id', roleVerifier(ADMIN));
-router
-  .route('/:id')
-  .get(UserControllers.getUser)
-  .patch(zodValidator(UserValidations.updateUserZodSchema), UserControllers.updateUser)
-  .delete(UserControllers.deleteUser);
-// .patch(productController.updateProductById)
+router.get('/', zodValidator(UserValidations.getProfileZodSchema), UserControllers.getProfile);
 
 //% formate
 // router.route('/create-user',).post(
@@ -38,4 +25,4 @@ router
 //   .route('/:id')
 //   .patch(productController.updateProductById)
 //   .delete(productController.deleteProductById);
-export const UserRoutes = router;
+export const UserProfileRoutes = router;

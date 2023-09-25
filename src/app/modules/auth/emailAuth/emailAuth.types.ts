@@ -8,7 +8,7 @@ export type TAccessToken = {
 
 export type TLoginUserResponse = TAccessToken & {
   email: string;
-  role: string;
+  role: 'admin' | 'customer';
   userId: string;
   iat: number;
   refreshToken?: string;
@@ -18,7 +18,7 @@ type TUserRequest = {
   name: string;
   email: string;
   password: string;
-  role: string;
+  role: 'admin' | 'customer';
   contactNo: string;
   address: string;
   profileImg?: string | null;

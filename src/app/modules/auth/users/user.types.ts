@@ -1,21 +1,4 @@
-enum UserRole {
-  ADMIN = 'admin',
-  CUSTOMER = 'customer',
-}
-
-type TUserRequest = {
-  name: string;
-  email: string;
-  password: string;
-  role: string;
-  contactNo: string;
-  address: string;
-  profileImg?: string | null;
-};
-type TUserResponse = TUserRequest & {
-  id: string;
-  reviewsAndRatings?: TReviewAndRating[];
-};
+import { TLoginUserResponse } from '../emailAuth/emailAuth.types';
 
 type TReviewAndRating = {
   id: string;
@@ -23,7 +6,7 @@ type TReviewAndRating = {
   rating: number; // Assuming it's an integer representing the rating
   userId: string;
   bookId: string;
-  user: TUserResponse; // Reference the User type
+  user: TLoginUserResponse; // Reference the User type
   book: TBook; // Reference the Book type
 };
 
@@ -38,4 +21,4 @@ type TBook = {
   reviewsAndRatings?: TReviewAndRating[];
 };
 
-export { TBook, TReviewAndRating, TUserRequest, TUserResponse, UserRole };
+export { TBook, TReviewAndRating };

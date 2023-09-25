@@ -6,7 +6,7 @@ import catchAsync from '../../../../utils/shared/helpers/catchAsync';
 import sendResponse from '../../../../utils/shared/helpers/sendResponse';
 
 import { UserServices } from './user.services';
-import { TUserRequest, TUserResponse } from './user.types';
+import { TUserRequest, TUserResponse } from '../emailAuth/emailAuth.types';
 
 //& Create User
 const createUser: RequestHandler = catchAsync(async (req: Request, res: Response) => {

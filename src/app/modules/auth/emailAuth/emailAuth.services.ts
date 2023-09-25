@@ -24,8 +24,6 @@ const createUser = async (user: TUserRequest): Promise<TUserResponse | null> => 
 
 const loginUser = async (payload: TEmailLogin): Promise<TLoginUserResponse> => {
   const { email, password } = payload;
-  console.log('🌼 🔥🔥 file: emailAuth.services.ts:28 🔥🔥 loginUser 🔥🔥 password🌼', password);
-
   const isUserExist = await prisma.user.findUnique({
     where: {
       email,
