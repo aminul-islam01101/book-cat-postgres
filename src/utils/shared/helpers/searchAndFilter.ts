@@ -2,46 +2,77 @@ export const searchFilterCalculator = (
   searchTerm: string | undefined,
   SearchableFields: string[],
   filtersData: { [key: string]: string | number | boolean }
-): { $and: object[] } | object => {
+): object[] => {
+  console.log('🌼 🔥🔥 file: searchAndFilter.ts:6 🔥🔥 filtersData🌼', filtersData);
+
   const andConditions = [];
   if (searchTerm) {
     andConditions.push({
-      $or: SearchableFields.map((field) => ({
+      OR: SearchableFields.map((field) => ({
         [field]: {
-          $regex: searchTerm,
-          $options: 'i',
+          contains: searchTerm,
+          mode: 'insensitive',
         },
       })),
     });
   }
 
-  // if (Object.keys(filtersData).length) {
+  // if (Object.keys(filtersData).length > 0) {
   //   andConditions.push({
-  //     $and: Object.entries(filtersData).map(([field, value]) => ({
-  //       [field]: value,
+  //     AND: Object.keys(filtersData).map((key) => ({
+  //       [key]: {
+  //         equals: filtersData[key],
+  //       },
   //     })),
   //   });
   // }
-  if (Object.keys(filtersData).length) {
-    andConditions.push(
-      ...Object.entries(filtersData).map(([field, value]) => {
-        if (field === 'maxPrice' || field === 'minPrice') {
-          const operator = field === 'maxPrice' ? '$lte' : '$gte';
+  if (Object.keys(filtersData).length > 0) {
+    andConditions.push({
+      AND: Object.keys(filtersData).map((key) => {
+        if (key === 'category') {
           return {
-            price: { [operator]: value },
+            categoryId: {
+              equals: filtersData[key],
+            },
+          };
+        }
+        if (key === 'maxPrice' || key === 'minPrice') {
+          const operator = key === 'maxPrice' ? 'lte' : 'gte';
+          const stringPrice = filtersData[key] as string;
+          return {
+            price: {
+              [operator]: parseFloat(stringPrice), // Convert value to a number
+            },
           };
         }
         return {
-          [field]: {
-            $regex: value,
-            $options: 'i',
+          [key]: {
+            equals: filtersData[key],
           },
         };
-      })
-    );
+      }),
+    });
   }
 
-  const whereConditions = andConditions.length > 0 ? { $and: andConditions } : {};
+  // if (Object.keys(filtersData).length) {
+  //   andConditions.push(
+  //     ...Object.entries(filtersData).map(([field, value]) => {
+  //       if (field === 'maxPrice' || field === 'minPrice') {
+  //         const operator = field === 'maxPrice' ? 'lte' : 'gte';
+  //         return {
+  //           price: {
+  //             [operator]: value, // Convert value to a number
+  //           },
+  //         };
+  //       }
+  //       return {
+  //         [field]: {
+  //           contains: value, // Using 'contains' for case-insensitive partial matching
+  //         },
+  //       };
+  //     })
+  //   );
+  // }
 
-  return whereConditions;
+  return andConditions;
 };

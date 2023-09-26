@@ -45,6 +45,9 @@ const getCategory = async (id: string): Promise<TCategoryResponse | null> => {
     where: {
       id,
     },
+    include: {
+      books: true,
+    },
   });
   return category;
 };

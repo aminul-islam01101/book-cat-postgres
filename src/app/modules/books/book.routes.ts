@@ -19,7 +19,7 @@ router.post(
 );
 
 // Get all categories
-// router.get('/', bookControllers.getBooks);
+router.get('/', bookControllers.getBooks);
 
 // Get a specific book by ID
 router.get('/:id', bookControllers.getBook);

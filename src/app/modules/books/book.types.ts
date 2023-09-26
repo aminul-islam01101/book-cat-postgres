@@ -6,3 +6,8 @@ export type TBookCreate = {
   publicationDate: string;
   categoryId: string;
 };
+export type TBookFilters = {
+  searchTerm?: string;
+  genre?: string;
+  publicationYear?: string;
+};

@@ -17,3 +17,9 @@ export type TGenericResponse<T> = {
   };
   data: T;
 };
+export type TTokenResponse<T> = {
+  statusCode: number;
+  success: boolean;
+  message?: string | null;
+  token: T;
+};

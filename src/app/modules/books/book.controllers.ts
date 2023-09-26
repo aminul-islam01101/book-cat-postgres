@@ -3,7 +3,10 @@ import { Request, Response } from 'express';
 import { RequestHandler } from 'express-serve-static-core';
 import httpStatus from 'http-status';
 import catchAsync from '../../../utils/shared/helpers/catchAsync';
+import pick from '../../../utils/shared/helpers/pick';
 import sendResponse from '../../../utils/shared/helpers/sendResponse';
+import { paginationFields } from '../../../utils/shared/paginations/pagination.constants';
+import { bookFilterableFields } from './book.constants';
 import { bookServices } from './book.services';
 import { TBookCreate } from './book.types';
 
@@ -22,13 +25,17 @@ const createBook: RequestHandler = catchAsync(async (req: Request, res: Response
 });
 //& GetBooks
 const getBooks: RequestHandler = catchAsync(async (req: Request, res: Response) => {
-  const result = await bookServices.getBooks();
+  const filters = pick(req.query, bookFilterableFields);
 
-  sendResponse<TBookCreate[]>(res, {
+  const paginationOptions = pick(req.query, paginationFields);
+  const result = await bookServices.getBooks(filters, paginationOptions);
+
+  sendResponse<Book[]>(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Books retrieved successfully!',
-    data: result,
+    message: `${!result?.data.length ? 'No Book found' : 'Book retrieved successfully !'}`,
+    meta: result?.meta,
+    data: result?.data,
   });
 });
 //&  getBook

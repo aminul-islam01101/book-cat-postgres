@@ -1,9 +1,14 @@
 // Import PrismaClient or any database client you are using
-import { Book, PrismaClient } from '@prisma/client';
+import { Book, Prisma, PrismaClient } from '@prisma/client';
 
 import httpStatus from 'http-status';
 import { HandleApiError } from '../../../utils/shared/errors/handleApiError';
-import { TBookCreate } from './book.types';
+import { searchFilterCalculator } from '../../../utils/shared/helpers/searchAndFilter';
+import { calculatePagination } from '../../../utils/shared/paginations/pagination.calculator';
+import { TPaginationOptions } from '../../../utils/shared/types/paginationTypes';
+import { TGenericResponse } from '../../../utils/shared/types/responseTypes';
+import { bookSearchableFields } from './book.constants';
+import { TBookCreate, TBookFilters } from './book.types';
 
 const prisma = new PrismaClient();
 
@@ -43,9 +48,44 @@ const createBook = async (book: Book): Promise<Book | null> => {
 
 //# get books
 
-const getBooks = async (): Promise<TBookCreate[] | null> => {
-  const books = await prisma.book.findMany();
-  return books;
+const getBooks = async (
+  filters: TBookFilters,
+  paginationOptions: Partial<TPaginationOptions>
+): Promise<TGenericResponse<Book[]> | null> => {
+  const { page, limit, skip, sortBy, sortOrder } = calculatePagination(paginationOptions);
+  const { searchTerm, ...filtersData } = filters;
+
+  const andConditions = searchFilterCalculator(searchTerm, bookSearchableFields, filtersData);
+
+  const whereConditions: Prisma.BookWhereInput =
+    andConditions.length > 0 ? { AND: andConditions } : {};
+
+  const result = await prisma.book.findMany({
+    where: whereConditions,
+    skip,
+    take: limit,
+    orderBy:
+      sortBy && sortOrder
+        ? {
+            [sortBy]: sortOrder,
+          }
+        : {
+            createdAt: 'desc',
+          },
+  });
+
+  const total = await prisma.book.count({
+    where: whereConditions, // Apply the same conditions for counting
+  });
+
+  return {
+    meta: {
+      total,
+      page,
+      limit,
+    },
+    data: result,
+  };
 };
 //#  get book
 const getBook = async (id: string): Promise<Book | null> => {

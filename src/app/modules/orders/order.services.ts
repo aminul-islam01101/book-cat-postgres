@@ -1,8 +1,8 @@
 /* eslint-disable prefer-destructuring */
 import { PrismaClient } from '@prisma/client';
 import httpStatus from 'http-status';
-import { TOrderResponse, TOrderedBooks } from './order.types';
 import { HandleApiError } from '../../../utils/shared/errors/handleApiError';
+import { TOrderResponse, TOrderedBooks } from './order.types';
 
 const prisma = new PrismaClient();
 
@@ -53,10 +53,13 @@ const createOrder = async (
     where: {
       id: orderId,
     },
+    include: {
+      orderedBooks: true,
+    },
   });
-  const response = { ...createdOrder, orderedBooks };
+  // const response = { ...createdOrder, orderedBooks };
   // Now you can return the order and any other relevant data
-  return response;
+  return createdOrder;
 };
 
 export const orderServices = { createOrder };
