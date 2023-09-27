@@ -21,8 +21,11 @@ router.post(
 // Get all categories
 router.get('/', bookControllers.getBooks);
 
-// Get a specific book by ID
+// Get Books By CategoryId
+router.get('/:categoryId/category', bookControllers.getBooksByCategory);
 router.get('/:id', bookControllers.getBook);
+
+// Get a specific book by ID
 
 // Update a specific book by ID
 router.patch(

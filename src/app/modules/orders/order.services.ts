@@ -5,16 +5,11 @@ import { HandleApiError } from '../../../utils/shared/errors/handleApiError';
 import { TOrderResponse, TOrderedBooks } from './order.types';
 
 const prisma = new PrismaClient();
-
+//# create order
 const createOrder = async (
   userId: string,
   orderedBooks: TOrderedBooks[]
 ): Promise<TOrderResponse | null> => {
-  console.log(
-    '🌼 🔥🔥 file: order.services.ts:7 🔥🔥 createOrder 🔥🔥 orderedBooks🌼',
-    orderedBooks
-  );
-
   let orderId: string;
 
   const transactionResult = await prisma.$transaction([
@@ -61,5 +56,25 @@ const createOrder = async (
   // Now you can return the order and any other relevant data
   return createdOrder;
 };
+//# get orders
+const getOrders = async (userId: string, role: string): Promise<TOrderResponse[] | null> => {
+  if (role === 'admin') {
+    const orders = await prisma.order.findMany({
+      include: {
+        orderedBooks: true,
+      },
+    });
+    return orders;
+  }
+  const orders = await prisma.order.findMany({
+    where: {
+      userId,
+    },
+    include: {
+      orderedBooks: true,
+    },
+  });
+  return orders;
+};
 
-export const orderServices = { createOrder };
+export const orderServices = { createOrder, getOrders };

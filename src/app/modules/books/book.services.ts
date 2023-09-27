@@ -87,6 +87,44 @@ const getBooks = async (
     data: result,
   };
 };
+// get books by category
+const getBooksByCategory = async (
+  categoryId: string,
+  paginationOptions: Partial<TPaginationOptions>
+): Promise<TGenericResponse<Book[]> | null> => {
+  const { page, limit, skip, sortBy, sortOrder } = calculatePagination(paginationOptions);
+
+  const result = await prisma.book.findMany({
+    where: {
+      categoryId,
+    },
+    skip,
+    take: limit,
+    orderBy:
+      sortBy && sortOrder
+        ? {
+            [sortBy]: sortOrder,
+          }
+        : {
+            createdAt: 'desc',
+          },
+  });
+
+  const total = await prisma.book.count({
+    where: {
+      categoryId,
+    }, // Apply the same conditions for counting
+  });
+
+  return {
+    meta: {
+      total,
+      page,
+      limit,
+    },
+    data: result,
+  };
+};
 //#  get book
 const getBook = async (id: string): Promise<Book | null> => {
   const book = await prisma.book.findUnique({
@@ -150,6 +188,7 @@ const deleteBook = async (id: string): Promise<TBookCreate | null> => {
 export const bookServices = {
   createBook,
   getBooks,
+  getBooksByCategory,
   getBook,
   updateBook,
   deleteBook,

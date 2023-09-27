@@ -1,6 +1,5 @@
 import express from 'express';
 import roleVerifier from '../../../utils/middlewares/roleVerifier';
-import zodValidator from '../../../utils/middlewares/zodValidator';
 import { EnumUserRole } from '../../../utils/shared/enum';
 import { orderControllers } from './order.controllers';
 
@@ -16,6 +15,7 @@ router.post(
   //   zodValidator(orderValidations.createOrderZodSchema),
   orderControllers.createOrder
 );
+router.get('/', roleVerifier(CUSTOMER, ADMIN), orderControllers.getOrders);
 
 // Get all categories
 // router.get('/', orderControllers.getOrders);

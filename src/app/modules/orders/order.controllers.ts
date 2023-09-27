@@ -1,4 +1,4 @@
-import { Order, OrderedBook } from '@prisma/client';
+import { OrderedBook } from '@prisma/client';
 import { Request, Response } from 'express';
 import { RequestHandler } from 'express-serve-static-core';
 import httpStatus from 'http-status';
@@ -21,7 +21,21 @@ const createOrder: RequestHandler = catchAsync(async (req: Request, res: Respons
     data: result,
   });
 });
+//& get orders
+const getOrders: RequestHandler = catchAsync(async (req: Request, res: Response) => {
+  const { id, role } = req.user as { id: string; role: string };
+
+  const result = await orderServices.getOrders(id, role);
+
+  sendResponse<TOrderResponse[]>(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'order retrieved successfully!',
+    data: result,
+  });
+});
 
 export const orderControllers = {
   createOrder,
+  getOrders,
 };

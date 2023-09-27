@@ -38,6 +38,25 @@ const getBooks: RequestHandler = catchAsync(async (req: Request, res: Response) 
     data: result?.data,
   });
 });
+//& GetBooks by category
+const getBooksByCategory: RequestHandler = catchAsync(async (req: Request, res: Response) => {
+  const { categoryId } = req.params;
+
+  const paginationOptions = pick(req.query, paginationFields);
+  const result = await bookServices.getBooksByCategory(categoryId, paginationOptions);
+
+  sendResponse<Book[]>(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: `${
+      !result?.data.length
+        ? 'No Book found'
+        : 'Books with associated category data fetched successfully'
+    }`,
+    meta: result?.meta,
+    data: result?.data,
+  });
+});
 //&  getBook
 const getBook: RequestHandler = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
@@ -81,5 +100,6 @@ export const bookControllers = {
   deleteBook,
   updateBook,
   getBooks,
+  getBooksByCategory,
   getBook,
 };
