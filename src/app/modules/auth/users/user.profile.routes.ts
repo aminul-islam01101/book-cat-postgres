@@ -9,7 +9,12 @@ import { UserValidations } from './user.validations';
 
 const router = express.Router();
 const { ADMIN, CUSTOMER } = EnumUserRole;
-router.get('/', zodValidator(UserValidations.getProfileZodSchema), UserControllers.getProfile);
+router.get(
+  '/',
+  roleVerifier(ADMIN, CUSTOMER),
+  //   zodValidator(UserValidations.getProfileZodSchema),
+  UserControllers.getProfile
+);
 
 //% formate
 // router.route('/create-user',).post(

@@ -167,7 +167,7 @@ const updateBook = async (id: string, payload: Partial<Book>): Promise<Book | nu
 };
 //# Delete book
 
-const deleteBook = async (id: string): Promise<TBookCreate | null> => {
+const deleteBook = async (id: string): Promise<Book | null> => {
   const isBookExist = await prisma.book.findUnique({
     where: {
       id,

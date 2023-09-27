@@ -17,7 +17,7 @@ export type TGenericResponse<T> = {
   };
   data: T;
 };
-export type TTokenResponse<T> = {
+export type TDirectResponse<T> = {
   statusCode: number;
   success: boolean;
   message?: string | null;

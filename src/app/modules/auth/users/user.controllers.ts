@@ -85,7 +85,7 @@ const deleteUser: RequestHandler = catchAsync(async (req: Request, res: Response
 });
 //& getProfile
 const getProfile: RequestHandler = catchAsync(async (req: Request, res: Response) => {
-  const { email } = req.body as { email: string };
+  const { email } = req.user as { email: string };
   const result = await UserServices.getProfile(email);
 
   sendResponse<TUserResponse>(res, {

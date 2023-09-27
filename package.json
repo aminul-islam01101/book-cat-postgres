@@ -14,7 +14,8 @@
     "lint-prettier-fix": "yarn lint:fix && yarn prettier:fix",
     "lint-prettier-check": "yarn lint:check && yarn prettier:check --formatter=node_modules/eslint-formatter-pretty",
     "lint-prettier": "yarn lint-prettier-fix && yarn lint-prettier-check --formatter=node_modules/eslint-formatter-pretty",
-    "prod": "NODE_ENV=production nodemon server.js"
+    "prod": "NODE_ENV=production nodemon server.js",
+    "postinstall": "prisma generate"
   },
   "lint-staged": {
     "src/**/*.ts": "yarn lint-prettier"

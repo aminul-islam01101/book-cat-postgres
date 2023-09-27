@@ -1,5 +1,5 @@
 // Import PrismaClient or any database client you are using
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, User } from '@prisma/client';
 import httpStatus from 'http-status';
 import { Secret } from 'jsonwebtoken';
 import { configs } from '../../../../utils/configs/env.configs';
@@ -12,7 +12,7 @@ const prisma = new PrismaClient();
 /* eslint-disable no-param-reassign */
 
 //# Create User
-const createUser = async (user: TUserRequest): Promise<TUserResponse | null> => {
+const createUser = async (user: TUserRequest): Promise<User | null> => {
   const createdUser = await prisma.user.create({
     data: user,
   });

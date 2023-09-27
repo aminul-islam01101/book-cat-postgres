@@ -1,15 +1,15 @@
 /* eslint-disable prefer-destructuring */
-import { PrismaClient } from '@prisma/client';
+import { Order, PrismaClient } from '@prisma/client';
 import httpStatus from 'http-status';
 import { HandleApiError } from '../../../utils/shared/errors/handleApiError';
-import { TOrderResponse, TOrderedBooks } from './order.types';
+import { TOrderedBooks } from './order.types';
 
 const prisma = new PrismaClient();
 //# create order
 const createOrder = async (
   userId: string,
   orderedBooks: TOrderedBooks[]
-): Promise<TOrderResponse | null> => {
+): Promise<Order | null> => {
   let orderId: string;
 
   const transactionResult = await prisma.$transaction([
@@ -57,7 +57,7 @@ const createOrder = async (
   return createdOrder;
 };
 //# get orders
-const getOrders = async (userId: string, role: string): Promise<TOrderResponse[] | null> => {
+const getOrders = async (userId: string, role: string): Promise<Order[] | null> => {
   if (role === 'admin') {
     const orders = await prisma.order.findMany({
       include: {
@@ -76,5 +76,23 @@ const getOrders = async (userId: string, role: string): Promise<TOrderResponse[]
   });
   return orders;
 };
+//# get order
+const getOrder = async (userId: string, role: string, orderId: string): Promise<Order | null> => {
+  const order = await prisma.order.findFirst({
+    where: {
+      id: orderId,
+    },
+    include: {
+      orderedBooks: true,
+    },
+  });
+  if (role === 'admin') {
+    return order;
+  }
 
-export const orderServices = { createOrder, getOrders };
+  if (order?.userId === userId) {
+    return order;
+  }
+  return null;
+};
+export const orderServices = { createOrder, getOrders, getOrder };

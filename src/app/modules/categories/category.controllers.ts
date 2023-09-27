@@ -1,3 +1,4 @@
+import { Category } from '@prisma/client';
 import { Request, Response } from 'express';
 import { RequestHandler } from 'express-serve-static-core';
 import httpStatus from 'http-status';
@@ -12,7 +13,7 @@ const createCategory: RequestHandler = catchAsync(async (req: Request, res: Resp
 
   const result = await categoryServices.createCategory(title);
 
-  sendResponse<TCategoryResponse>(res, {
+  sendResponse<Category>(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: 'category created successfully!',
@@ -23,7 +24,7 @@ const createCategory: RequestHandler = catchAsync(async (req: Request, res: Resp
 const getCategories: RequestHandler = catchAsync(async (req: Request, res: Response) => {
   const result = await categoryServices.getCategories();
 
-  sendResponse<TCategoryResponse[]>(res, {
+  sendResponse<Category[]>(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: 'Categories retrieved successfully!',
@@ -35,7 +36,7 @@ const getCategory: RequestHandler = catchAsync(async (req: Request, res: Respons
   const { id } = req.params;
   const result = await categoryServices.getCategory(id);
 
-  sendResponse<TCategoryResponse>(res, {
+  sendResponse<Category>(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: 'Category retrieved successfully!',
@@ -48,7 +49,7 @@ const updateCategory: RequestHandler = catchAsync(async (req: Request, res: Resp
   const { title } = req.body as { title: string };
   const result = await categoryServices.updateCategory(id, title);
 
-  sendResponse<TCategoryResponse>(res, {
+  sendResponse<Category>(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: 'Category updated successfully!',
@@ -60,7 +61,7 @@ const deleteCategory: RequestHandler = catchAsync(async (req: Request, res: Resp
   const { id } = req.params;
   const result = await categoryServices.deleteCategory(id);
 
-  sendResponse<TCategoryResponse>(res, {
+  sendResponse<Category>(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: 'Category deleted successfully!',

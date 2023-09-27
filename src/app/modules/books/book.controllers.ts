@@ -8,7 +8,6 @@ import sendResponse from '../../../utils/shared/helpers/sendResponse';
 import { paginationFields } from '../../../utils/shared/paginations/pagination.constants';
 import { bookFilterableFields } from './book.constants';
 import { bookServices } from './book.services';
-import { TBookCreate } from './book.types';
 
 //& Create category
 const createBook: RequestHandler = catchAsync(async (req: Request, res: Response) => {
@@ -16,7 +15,7 @@ const createBook: RequestHandler = catchAsync(async (req: Request, res: Response
 
   const result = await bookServices.createBook(book);
 
-  sendResponse<TBookCreate>(res, {
+  sendResponse<Book>(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: 'book created successfully!',
@@ -62,7 +61,7 @@ const getBook: RequestHandler = catchAsync(async (req: Request, res: Response) =
   const { id } = req.params;
   const result = await bookServices.getBook(id);
 
-  sendResponse<TBookCreate>(res, {
+  sendResponse<Book>(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: 'Book retrieved successfully!',
@@ -72,10 +71,10 @@ const getBook: RequestHandler = catchAsync(async (req: Request, res: Response) =
 //& Update Book
 const updateBook: RequestHandler = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
-  const updateData = req.body as Partial<TBookCreate>;
+  const updateData = req.body as Partial<Book>;
   const result = await bookServices.updateBook(id, updateData);
 
-  sendResponse<TBookCreate>(res, {
+  sendResponse<Book>(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: 'Book updated successfully!',
@@ -87,7 +86,7 @@ const deleteBook: RequestHandler = catchAsync(async (req: Request, res: Response
   const { id } = req.params;
   const result = await bookServices.deleteBook(id);
 
-  sendResponse<TBookCreate>(res, {
+  sendResponse<Book>(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: 'Book deleted successfully!',

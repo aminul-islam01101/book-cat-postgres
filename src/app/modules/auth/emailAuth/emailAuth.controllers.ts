@@ -2,12 +2,13 @@ import { Request, Response } from 'express';
 import { RequestHandler } from 'express-serve-static-core';
 import httpStatus from 'http-status';
 
+import { User } from '@prisma/client';
 import catchAsync from '../../../../utils/shared/helpers/catchAsync';
-import sendResponse from '../../../../utils/shared/helpers/sendResponse';
+import sendResponse, { sendDirectResponse } from '../../../../utils/shared/helpers/sendResponse';
 
 import { cookieOptions } from '../../../../utils/shared/helpers/cookieOptions';
 import { emailAuthServices } from './emailAuth.services';
-import { TEmailLogin, TLoginUserResponse, TUserRequest, TUserResponse } from './emailAuth.types';
+import { TEmailLogin, TUserRequest } from './emailAuth.types';
 
 //& Create User
 const createUser: RequestHandler = catchAsync(async (req: Request, res: Response) => {
@@ -15,7 +16,7 @@ const createUser: RequestHandler = catchAsync(async (req: Request, res: Response
 
   const result = await emailAuthServices.createUser(user);
 
-  sendResponse<TUserResponse>(res, {
+  sendResponse<User>(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: 'user created successfully!',
@@ -34,11 +35,11 @@ const loginUser = catchAsync(async (req: Request, res: Response) => {
   res.cookie('refreshToken', refreshToken, cookieOptions);
   res.cookie('accessToken', rest.accessToken, cookieOptions);
 
-  sendResponse<TLoginUserResponse>(res, {
+  sendDirectResponse<string>(res, {
     statusCode: 200,
     success: true,
     message: 'User logged in successfully !',
-    data: rest,
+    token: rest.accessToken,
   });
 });
 

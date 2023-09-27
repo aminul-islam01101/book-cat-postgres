@@ -16,6 +16,7 @@ router.post(
   orderControllers.createOrder
 );
 router.get('/', roleVerifier(CUSTOMER, ADMIN), orderControllers.getOrders);
+router.get('/:orderId', roleVerifier(CUSTOMER, ADMIN), orderControllers.getOrder);
 
 // Get all categories
 // router.get('/', orderControllers.getOrders);

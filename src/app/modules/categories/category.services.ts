@@ -1,16 +1,15 @@
 // Import PrismaClient or any database client you are using
-import { PrismaClient } from '@prisma/client';
+import { Category, PrismaClient } from '@prisma/client';
 
 import httpStatus from 'http-status';
 import { HandleApiError } from '../../../utils/shared/errors/handleApiError';
-import { TCategoryResponse } from './category.types';
 
 const prisma = new PrismaClient();
 
 /* eslint-disable no-param-reassign */
 
 //# Create category
-const createCategory = async (category: string): Promise<TCategoryResponse | null> => {
+const createCategory = async (category: string): Promise<Category | null> => {
   const lowerCaseCategory = category.toLowerCase();
 
   const existingCategory = await prisma.category.findFirst({
@@ -35,12 +34,12 @@ const createCategory = async (category: string): Promise<TCategoryResponse | nul
 
 //# get categories
 
-const getCategories = async (): Promise<TCategoryResponse[] | null> => {
+const getCategories = async (): Promise<Category[] | null> => {
   const categories = await prisma.category.findMany();
   return categories;
 };
 //#  get category
-const getCategory = async (id: string): Promise<TCategoryResponse | null> => {
+const getCategory = async (id: string): Promise<Category | null> => {
   const category = await prisma.category.findUnique({
     where: {
       id,
@@ -53,7 +52,7 @@ const getCategory = async (id: string): Promise<TCategoryResponse | null> => {
 };
 
 //# Update category
-const updateCategory = async (id: string, payload: string): Promise<TCategoryResponse | null> => {
+const updateCategory = async (id: string, payload: string): Promise<Category | null> => {
   const isCategoryExist = await prisma.category.findUnique({
     where: {
       id,
@@ -74,7 +73,7 @@ const updateCategory = async (id: string, payload: string): Promise<TCategoryRes
 };
 //# Delete category
 
-const deleteCategory = async (id: string): Promise<TCategoryResponse | null> => {
+const deleteCategory = async (id: string): Promise<Category | null> => {
   const isCategoryExist = await prisma.category.findUnique({
     where: {
       id,

@@ -40,8 +40,11 @@ app.use(passport.session()); */
 
 //# route base
 // home route
-app.get('^/$|/index(.html)?', (_req, res) => {
-  res.sendFile(path.join(__dirname, './utils/shared/views', 'index.html'));
+// app.get('^/$|/index(.html)?', (_req, res) => {
+//   res.sendFile(path.join(__dirname, './utils/shared/views', 'index.html'));
+// });
+app.get('/', (_req, res) => {
+  res.send('test server is running');
 });
 // business routes
 app.use('/api/v1', routes);

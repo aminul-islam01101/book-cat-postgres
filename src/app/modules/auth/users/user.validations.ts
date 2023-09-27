@@ -1,5 +1,5 @@
+import { UserRole } from '@prisma/client';
 import { z } from 'zod';
-import { UserRole } from './user.types';
 
 //% Create User validation
 const createUserZodSchema = z.object({
